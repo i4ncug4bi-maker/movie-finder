@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ movie.title }}</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        img {
+            width: 300px;
+            border-radius: 10px;
+        }
+        .container {
+            margin-top: 40px;
+        }
+        a {
+            color: #ff4444;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>{{ movie.title }}</h1>
+
+        <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="Poster">
+
+        <h2>Release date: {{ movie.release_date }}</h2>
+
+        <p style="max-width: 600px; margin: auto;">
+            {{ movie.overview }}
+        </p>
+
+        {% if trailer_key %}
+            <h3>Trailer:</h3>
+            <iframe width="560" height="315"
+                src="https://www.youtube.com/embed/{{ trailer_key }}"
+                frameborder="0"
+                allowfullscreen></iframe>
+        {% endif %}
+
+        <p><br><a href="/">🔙 Back to Search</a></p>
+    </div>
+</body>
+</html>
