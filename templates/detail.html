@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ movie.title }} – Details</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle at top, #3a4fff 0, #0b1020 45%, #050712 100%);
+            color: #f5f5f5;
+            padding: 30px 40px;
+        }
+        a {
+            color: #9fb4ff;
+            text-decoration: none;
+        }
+        a:hover { text-decoration: underline; }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .top-bar {
+            margin-bottom: 18px;
+        }
+        .layout {
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 24px;
+        }
+        .poster-wrap {
+            background: rgba(9,12,30,0.95);
+            padding: 10px;
+            border-radius: 18px;
+            box-shadow: 0 16px 30px rgba(0,0,0,0.7);
+        }
+        .poster {
+            width: 100%;
+            border-radius: 12px;
+            background: #191d33;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 360px;
+        }
+        .poster img {
+            width: 100%;
+            border-radius: 12px;
+        }
+        .info {
+            background: rgba(9,12,30,0.95);
+            border-radius: 18px;
+            padding: 18px 22px 22px;
+            box-shadow: 0 16px 30px rgba(0,0,0,0.7);
+        }
+        h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        .meta {
+            font-size: 14px;
+            color: #a6acc9;
+            margin-bottom: 12px;
+        }
+        .section-title {
+            margin-top: 18px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .overview {
+            font-size: 14px;
+            color: #d0d4ef;
+        }
+        .btn-primary {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #ff5c7a, #ffb64b);
+            color: #090b18;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        ul.providers {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        ul.providers li {
+            margin-bottom: 4px;
+        }
+        .pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            margin-left: 4px;
+            background: rgba(255,255,255,0.08);
+            color: #c3c8e5;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top-bar">
+        <a href="/">← Back to search</a>
+    </div>
+
+    <div class="layout">
+        <div class="poster-wrap">
+            <div class="poster">
+                {% if movie.poster_path %}
+                    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% else %}
+                    No poster available
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="info">
+            <h1>{{ movie.title }}</h1>
+            <div class="meta">
+                {% if movie.release_date %}
+                    Year: {{ movie.release_date[:4] }} •
+                {% endif %}
+                Rating: {{ "%.1f"|format(movie.vote_average or 0) }} ({{ movie.vote_count }} votes)
+                <br>
+                {% if movie.genres %}
+                    Genres:
+                    {% for g in movie.genres %}
+                        {{ g.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="section-title">Overview</div>
+            <p class="overview">{{ movie.overview }}</p>
+
+            <div class="section-title">Trailer</div>
+            {% if trailer_url %}
+                <a class="btn-primary" href="{{ trailer_url }}" target="_blank">
+                    ▶ Watch trailer on YouTube
+                </a>
+            {% else %}
+                <p>No trailer found.</p>
+            {% endif %}
+
+            <div class="section-title">Where to watch</div>
+            {% if providers %}
+                <ul class="providers">
+                    {% for p in providers %}
+                        <li>
+                            {{ p.name }}
+                            <span class="pill">{{ p.type }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No streaming information found for this region.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
