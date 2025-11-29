@@ -2,59 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Searcher</title>
+    <title>Movie Finder</title>
     <style>
         body {
-            background-color: #0d0d0d;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 50px;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #263dff 0, #050714 55%, #020308 100%);
+            color: #f5f5ff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            background: rgba(6, 10, 32, 0.96);
+            border-radius: 24px;
+            padding: 32px 36px 28px;
+            width: 100%;
+            max-width: 640px;
+            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(16px);
         }
         h1 {
-            font-size: 40px;
-            margin-bottom: 20px;
+            margin: 0 0 4px;
+            font-size: 30px;
+            letter-spacing: 0.05em;
         }
-        input {
-            width: 300px;
-            padding: 10px;
-            font-size: 18px;
+        .subtitle {
+            font-size: 13px;
+            color: #aab1ff;
+            margin-bottom: 26px;
+        }
+        label {
+            font-size: 13px;
+            color: #cfd3ff;
+            display: block;
+            margin-bottom: 6px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid #3942ff;
+            background: rgba(8, 10, 30, 0.9);
+            color: #f5f5ff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #6bffda;
+            box-shadow: 0 0 0 1px rgba(107, 255, 218, 0.4);
+        }
+        .row {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .row > div {
+            flex: 1;
+        }
+        .year-input {
+            max-width: 130px;
         }
         button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: red;
-            color: white;
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 999px;
             border: none;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
             cursor: pointer;
+            background: linear-gradient(135deg, #ff7b2c, #ff3f6c);
+            color: white;
+            box-shadow: 0 14px 28px rgba(255, 63, 108, 0.45);
+            margin-top: 10px;
         }
-        .movie {
-            margin-top: 40px;
+        button:hover {
+            filter: brightness(1.07);
+        }
+        .hint {
+            font-size: 11px;
+            color: #8f96ff;
+            margin-top: 4px;
         }
     </style>
 </head>
 <body>
+<div class="card">
+    <h1>Movie Finder</h1>
+    <div class="subtitle">Find something to watch by title, genre and year.</div>
 
-<h1>🍿 Movie Searcher</h1>
+    <form action="{{ url_for('search') }}" method="post">
+        <div class="row">
+            <div>
+                <label for="title">Movie title (optional)</label>
+                <input id="title" name="title" type="text" placeholder="e.g. Inception">
+            </div>
+        </div>
 
-<form action="/search" method="get">
-    <input type="text" name="title" placeholder="Enter movie name..." required>
-    <button type="submit">Search</button>
-</form>
+        <div class="row">
+            <div>
+                <label for="genre">Genre</label>
+                <select id="genre" name="genre_id">
+                    <option value="">Any genre</option>
+                    {% for g in genres %}
+                        <option value="{{ g.id }}">{{ g.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="year-input">
+                <label for="year">Year</label>
+                <input id="year" name="year" type="number" min="1900" max="2100" placeholder="2024">
+            </div>
+        </div>
 
-{% if movie %}
-<div class="movie">
-    <h2>{{ movie.title }}</h2>
-    <p>Release date: {{ movie.release_date }}</p>
-    <p>⭐ Rating: {{ movie.vote_average }}/10</p>
-    <p>{{ movie.overview }}</p>
-
-    {% if trailer %}
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ trailer }}" frameborder="0" allowfullscreen></iframe>
-    {% endif %}
+        <button type="submit">Search</button>
+        <div class="hint">
+            Tip: poți lăsa titlul gol ca să vezi filme populare pentru un gen / an.
+        </div>
+    </form>
 </div>
-{% endif %}
-
 </body>
 </html>
