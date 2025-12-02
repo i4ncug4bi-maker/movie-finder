@@ -66,52 +66,51 @@
             color: var(--muted);
         }
 
-        /* GRID DE CARDURI */
-
+        /* GRID DE CARDURI – mai multe pe rând, carduri mai mici */
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 18px;
         }
 
         .movie-card {
             background: var(--bg-card);
-            border-radius: 20px;
-            padding: 14px;
+            border-radius: 18px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);
+            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.8);
             border: 1px solid rgba(148, 163, 184, 0.2);
             transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
         }
 
         .movie-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 26px 60px rgba(15, 23, 42, 0.95);
+            transform: translateY(-3px);
+            box-shadow: 0 22px 45px rgba(15, 23, 42, 0.95);
             border-color: rgba(59, 130, 246, 0.7);
         }
 
         .poster-wrapper {
             width: 100%;
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             background: radial-gradient(circle at top, #1f2937, #020617);
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 220px;
+            min-height: 210px;
         }
 
         .poster-wrapper img {
             width: 100%;
-            height: 100%;
+            height: 210px;
             object-fit: cover;
             display: block;
         }
 
         .no-poster {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--muted);
         }
 
@@ -119,18 +118,18 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 8px;
+            gap: 6px;
             margin-bottom: 4px;
         }
 
         .movie-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             line-height: 1.2;
         }
 
         .movie-year {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--muted);
         }
 
@@ -138,8 +137,8 @@
             background: var(--rating-bg);
             color: var(--rating-text);
             border-radius: 999px;
-            padding: 3px 10px;
-            font-size: 0.8rem;
+            padding: 2px 8px;
+            font-size: 0.75rem;
             display: inline-flex;
             align-items: center;
             gap: 4px;
@@ -147,21 +146,21 @@
         }
 
         .rating-chip span.star {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .votes {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--muted);
             margin-top: 2px;
         }
 
         .overview {
-            font-size: 0.85rem;
-            line-height: 1.4;
+            font-size: 0.8rem;
+            line-height: 1.35;
             color: #e5e7eb;
-            margin: 8px 0 12px;
-            max-height: 4.2em; /* ~3 linii */
+            margin: 6px 0 10px;
+            max-height: 3.9em; /* ~3 linii */
             overflow: hidden;
         }
 
@@ -173,27 +172,26 @@
         .details-btn {
             border: none;
             border-radius: 999px;
-            padding: 8px 16px;
-            font-size: 0.85rem;
+            padding: 6px 12px;
+            font-size: 0.8rem;
             font-weight: 500;
             cursor: pointer;
             background: linear-gradient(135deg, var(--accent), var(--accent-soft));
             color: white;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.45);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45);
             transition: transform 0.12s ease, box-shadow 0.12s ease;
         }
 
         .details-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 12px 28px rgba(37, 99, 235, 0.6);
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.6);
         }
 
         .details-btn:active {
             transform: translateY(0);
-            box-shadow: 0 5px 14px rgba(37, 99, 235, 0.45);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.45);
         }
 
-        /* Mesaj pentru când nu sunt rezultate */
         .no-results {
             margin-top: 24px;
             padding: 18px 20px;
@@ -248,10 +246,12 @@
                             {% endif %}
                         </div>
                         <div>
-                            <div class="rating-chip">
-                                <span class="star">★</span>
-                                <span>{{ "%.1f"|format(movie.rating or 0) }}</span>
-                            </div>
+                            {% if movie.rating %}
+                                <div class="rating-chip">
+                                    <span class="star">★</span>
+                                    <span>{{ "%.1f"|format(movie.rating) }}</span>
+                                </div>
+                            {% endif %}
                             <div class="votes">
                                 Votes: {{ movie.vote_count or 0 }}
                             </div>

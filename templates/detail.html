@@ -2,163 +2,253 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ movie.title }} – Details</title>
+    <title>{{ movie.title }} ({{ movie.year }}) - Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <style>
         body {
+            font-family: Arial, sans-serif;
+            background-color: #0b1120;
+            color: #e5e7eb;
             margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(circle at top, #263dff 0, #050714 55%, #020308 100%);
-            color: #f5f5ff;
+            padding: 0;
         }
-        .container {
-            max-width: 1040px;
-            margin: 32px auto 40px;
-            padding: 0 20px;
+
+        header {
+            background-color: #111827;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        a.back-link {
-            color: #9fb2ff;
-            font-size: 13px;
+
+        header a {
+            color: #e5e7eb;
             text-decoration: none;
+            font-weight: bold;
         }
-        a.back-link:hover {
+
+        header a:hover {
             text-decoration: underline;
         }
-        .layout {
-            margin-top: 16px;
-            display: grid;
-            grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+
+        .container {
+            max-width: 1100px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        .movie-layout {
+            display: flex;
+            flex-wrap: wrap;
             gap: 24px;
         }
-        .poster-card, .info-card {
-            background: rgba(6, 10, 32, 0.96);
-            border-radius: 24px;
-            padding: 18px 18px 20px;
-            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.7);
+
+        .poster {
+            flex: 0 0 250px;
         }
-        .poster-card img {
+
+        .poster img {
             width: 100%;
-            border-radius: 18px;
-            display: block;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
         }
-        h1 {
-            margin: 4px 0 6px;
+
+        .details {
+            flex: 1 1 300px;
+        }
+
+        .title {
             font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
+
         .meta {
-            font-size: 13px;
-            color: #cfd3ff;
-            margin-bottom: 10px;
+            color: #9ca3af;
+            margin-bottom: 8px;
         }
-        .rating-chip {
-            background: rgba(20, 20, 20, 0.9);
+
+        .genres {
+            margin-bottom: 16px;
+            color: #9ca3af;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #1f2937;
+            color: #e5e7eb;
             border-radius: 999px;
             padding: 4px 10px;
-            font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            margin-bottom: 10px;
-        }
-        .rating-chip span.star {
-            color: #ffd76a;
-        }
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #9fb2ff;
-            margin-top: 14px;
+            font-size: 12px;
+            margin-right: 6px;
             margin-bottom: 4px;
         }
-        .overview {
-            font-size: 14px;
-            color: #dde2ff;
+
+        .section-title {
+            margin-top: 24px;
+            margin-bottom: 8px;
+            font-size: 18px;
+            font-weight: bold;
         }
-        .btn-primary, .btn-secondary {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 9px 16px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 600;
+
+        .overview {
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .trailer-link a {
+            color: #60a5fa;
             text-decoration: none;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #ff7b2c, #ff3f6c);
-            color: #020308;
+
+        .trailer-link a:hover {
+            text-decoration: underline;
         }
-        .btn-secondary {
-            background: rgba(18, 26, 66, 0.95);
-            color: #e3e6ff;
-            border: 1px solid rgba(112, 133, 255, 0.7);
+
+        .region-form {
+            margin-top: 16px;
+            margin-bottom: 8px;
         }
-        .providers-list {
-            font-size: 14px;
-            color: #dde2ff;
+
+        .region-form select {
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid #4b5563;
+            background-color: #111827;
+            color: #e5e7eb;
         }
-        @media (max-width: 820px) {
-            .layout {
-                grid-template-columns: 1fr;
+
+        .where-list p {
+            margin: 4px 0;
+        }
+
+        .no-providers {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #1f2937;
+            margin: 16px 0;
+        }
+
+        @media (max-width: 768px) {
+            .movie-layout {
+                flex-direction: column;
+            }
+            .poster {
+                max-width: 250px;
+                margin: 0 auto;
             }
         }
     </style>
 </head>
-<body>
-<div class="container">
-    <a href="{{ url_for('index') }}" class="back-link">← Back to search</a>
 
-    <div class="layout">
-        <div class="poster-card">
+<body>
+<header>
+    <a href="javascript:history.back()" class="back-link">← Back to results</a>
+    <span>MovieFinder</span>
+</header>
+
+<div class="container">
+    <div class="movie-layout">
+        <div class="poster">
             {% if movie.poster_url %}
                 <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
             {% else %}
-                <div style="height: 360px; display:flex; align-items:center; justify-content:center; color:#888;">
+                <div style="width:100%;height:360px;background:#1f2937;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#6b7280;">
                     No poster available
                 </div>
             {% endif %}
         </div>
 
-        <div class="info-card">
-            <h1>{{ movie.title }}</h1>
-
-            <div class="meta">
-                {% if movie.year %}Year: {{ movie.year }} · {% endif %}
-                {% if movie.genres %}Genres: {{ movie.genres | join(', ') }}{% endif %}
+        <div class="details">
+            <div class="title">
+                {{ movie.title }}
+                {% if movie.year %}
+                    <span style="color:#9ca3af;font-weight:normal;">({{ movie.year }})</span>
+                {% endif %}
             </div>
 
-            {% if movie.rating %}
-                <div class="rating-chip">
-                    <span class="star">★</span>
-                    <span>{{ movie.rating }}</span>
-                    {% if movie.votes %}<span>· {{ movie.votes }} votes</span>{% endif %}
+            <div class="meta">
+                {% if movie.rating %}
+                    ⭐ {{ movie.rating }}/10
+                {% endif %}
+                {% if movie.votes %}
+                    · {{ movie.votes }} votes
+                {% endif %}
+            </div>
+
+            {% if movie.genres %}
+                <div class="genres">
+                    {% for g in movie.genres %}
+                        <span class="badge">{{ g }}</span>
+                    {% endfor %}
                 </div>
             {% endif %}
 
             <div class="section-title">Overview</div>
             <div class="overview">
-                {{ movie.overview or "No overview available." }}
+                {% if movie.overview %}
+                    {{ movie.overview }}
+                {% else %}
+                    <span class="no-providers">No overview available.</span>
+                {% endif %}
             </div>
 
-            <div class="section-title">Trailer</div>
             {% if movie.trailer_url %}
-                <a href="{{ movie.trailer_url }}" target="_blank" class="btn-primary">
-                    Watch trailer on YouTube
-                </a>
-            {% else %}
-                <div class="providers-list">No trailer found.</div>
+                <div class="section-title">Trailer</div>
+                <div class="trailer-link">
+                    <a href="{{ movie.trailer_url }}" target="_blank" rel="noopener noreferrer">
+                        ▶ Watch trailer on YouTube
+                    </a>
+                </div>
             {% endif %}
 
-            <div class="section-title">Where to watch</div>
-            {% if movie.providers %}
-                <div class="providers-list">
-                    Available on: {{ movie.providers | join(', ') }} (region: US)
-                </div>
-            {% else %}
-                <div class="providers-list">
-                    No streaming information found for this region.
-                </div>
-            {% endif %}
+            <hr>
+
+            <!-- Select Region -->
+            <div class="region-form">
+                <form method="get" action="">
+                    <label for="region">Select region for "Where to watch":</label>
+                    <select id="region" name="region" onchange="this.form.submit()">
+                        {% for code, name in regions %}
+                            <option value="{{ code }}" {% if code == region %}selected{% endif %}>
+                                {{ code }} - {{ name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <div class="section-title">
+                Where to Watch ({{ region }})
+            </div>
+
+            {% set wt = movie.where_to_watch %}
+            <div class="where-list">
+                {% if wt.stream or wt.buy or wt.rent %}
+
+                    {% if wt.stream %}
+                        <p><strong>Streaming:</strong> {{ wt.stream | join(', ') }}</p>
+                    {% endif %}
+
+                    {% if wt.buy %}
+                        <p><strong>Buy:</strong> {{ wt.buy | join(', ') }}</p>
+                    {% endif %}
+
+                    {% if wt.rent %}
+                        <p><strong>Rent:</strong> {{ wt.rent | join(', ') }}</p>
+                    {% endif %}
+
+                {% else %}
+                    <p class="no-providers">
+                        No provider information available for this region.
+                    </p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
